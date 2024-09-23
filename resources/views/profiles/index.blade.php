@@ -4,15 +4,22 @@
 <div class="container">
    <div class="row">
     <div class="col-3 p-5">
-        <img src="/assets/avatar.png" alt="" style="height: 100px" >
+        <img src="{{$user->profile->profileImage()}}" alt="" class="rounded-circle w-100" >
     </div>
     <div class="col-9 pt-5">
         <div class="d-flex justify-content-between align-items-baseline">
             <h1>{{ $user->username}}</h1>
-            <a href="#">Add New Post</a>
+            
+            @can ('update' , $user->profile)
+            <a href="/p/create">Add New Post</a>
+           @endcan 
+           
         </div>
+      @can ('update' , $user->profile)
+      <a href="/profile/{{$user->id}}/edit">Edit Profile</a>
+      @endcan 
         <div class="d-flex">
-            <div class="p-3"><strong>153</strong> posts</div>
+            <div class="p-3"><strong>{{$user->posts->count()}}</strong> posts</div>
             <div class="p-3"><strong>23k</strong> followers</div>
             <div class="p-3"><strong>212</strong> following</div>
         </div>
@@ -22,9 +29,12 @@
     </div>
    </div>
    <div class="row pt-5">
-      <div class="col-4"><img src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp" class="w-100"></div>
-      <div class="col-4"><img src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp" class="w-100"></div>
-      <div class="col-4"><img src="https://img-cdn.pixlr.com/image-generator/history/65bb506dcb310754719cf81f/ede935de-1138-4f66-8ed7-44bd16efc709/medium.webp" class="w-100"></div>
-   </div>
+    @foreach($user->posts as $post)
+    <div class="col-4 pb-4">
+        <a href="/p/{{ $post->id}}">
+        <img src="/storage/{{ $post -> image}}" class="w-100">
+         </a>
+    </div>
+    @endforeach
 </div>
 @endsection
